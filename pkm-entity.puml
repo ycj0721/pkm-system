@@ -1,0 +1,66 @@
+@startuml PKM Core Entities
+!theme plain
+
+' 设置皮肤参数，让图表更清晰
+skinparam shadowing false
+skinparam roundcorner 15
+skinparam class {
+    BackgroundColor #FFF
+    BorderColor #333
+    ArrowColor #333
+}
+skinparam defaultFontName "Microsoft YaHei"
+
+' 定义标签类 Tag
+class Tag {
+  - id: Long
+  - name: String
+  --
+  + Tag()
+  + Tag(name: String)
+  + getId(): Long
+  + setId(id: Long): void
+  + getName(): String
+  + setName(name: String): void
+}
+
+' 定义笔记基类 Note
+class Note {
+  - id: Long
+  - title: String
+  - content: String
+  - createdAt: LocalDateTime
+  - updatedAt: LocalDateTime
+  - tags: Set<Tag> = new HashSet<>()
+  --
+  + Note(title: String, content: String)
+  + getId(): Long
+  + setId(id: Long): void
+  + getTitle(): String
+  + setTitle(title: String): void
+  + getContent(): String
+  + setContent(content: String): void
+  + getCreatedAt(): LocalDateTime
+  + getUpdatedAt(): LocalDateTime
+  + setUpdatedAt(updatedAt: LocalDateTime): void
+  + getTags(): Set<Tag>
+  + addTag(tag: Tag): void
+  + removeTag(tag: Tag): void
+}
+
+' 定义文本笔记子类 TextNote
+class TextNote {
+  - summary: String
+  --
+  + TextNote(title: String, content: String)
+  + getSummary(): String
+  + setSummary(summary: String): void
+}
+
+' 定义继承关系：TextNote 继承自 Note
+Note <|-- TextNote
+
+' 定义关联关系：Note 和 Tag 是多对多关系
+Note "1" *-- "*" Tag : tagged with >
+
+@enduml
